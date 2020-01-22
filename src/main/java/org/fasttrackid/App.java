@@ -2,6 +2,7 @@ package org.fasttrackid;
 
 import org.persistance.TaskRepository;
 import org.transfer.CreateTaskRequest;
+import org.transfer.UpdateTaskRequest;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -20,5 +21,11 @@ public class App
         request.setDeadline(LocalDate.now().plusWeeks(1));
 
         taskRepository.createTask(request);
+
+//        UpdateTaskRequest request = new UpdateTaskRequest();
+//        request.setDone(true);
+//        taskRepository.updateTask(1,request);
+
+
     }
 }
