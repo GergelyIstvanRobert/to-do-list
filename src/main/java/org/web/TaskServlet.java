@@ -21,9 +21,14 @@ public class TaskServlet extends HttpServlet {
 
     private TaskService taskService = new TaskService();
 
-//endpoint
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        setAccessControlHeaders(resp);
+    }
+//for pre-flight request
+    //endpoint
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {setAccessControlHeaders(resp);
         CreateTaskRequest request = ObjectMapperConfiguration.objectMapper.readValue(req.getReader() , CreateTaskRequest.class);
         try {
             taskService.createTask(request);
@@ -33,9 +38,9 @@ public class TaskServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+//CORS configuration
     @Override
-    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {setAccessControlHeaders(resp);
         String id = req.getParameter("id");
 
         try {
@@ -46,7 +51,7 @@ public class TaskServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {setAccessControlHeaders(resp);
         String id = req.getParameter("id");
 
         UpdateTaskRequest request = ObjectMapperConfiguration.objectMapper.readValue(req.getReader() , UpdateTaskRequest.class);
@@ -61,7 +66,7 @@ public class TaskServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {setAccessControlHeaders(resp);
         try {
             List<Task> tasks = taskService.getTasks();
 
@@ -73,5 +78,12 @@ public class TaskServlet extends HttpServlet {
             resp.sendError(500,"Internal server error: " + e.getMessage());
 
         }
+    }
+    private void setAccessControlHeaders(HttpServletResponse resp) {
+        resp.setHeader("Access-Control-Allow-Origin","*");
+        resp.setHeader("Access-Control-Allow-Methods","GET, POST, PUT, DELETE");
+        resp.setHeader("Access-Control-Allow-Headers","content-type");
+
+
     }
 }
